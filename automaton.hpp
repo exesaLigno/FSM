@@ -10,7 +10,7 @@
 #include <functional>
 
 template<typename State, typename Condition>
-class Automaton
+class FSM
 {
 private:
     struct Edge
@@ -89,12 +89,12 @@ private:
     }
 
 public:
-    Automaton(State default_state) : default_state(default_state), current_state(default_state), previous_state(default_state)
+    FSM(State default_state) : default_state(default_state), current_state(default_state), previous_state(default_state)
     {
         possible_states.insert(default_state);
     }
 
-    Automaton(State default_state, State start_state) : default_state(default_state), current_state(start_state), previous_state(start_state)
+    FSM(State default_state, State start_state) : default_state(default_state), current_state(start_state), previous_state(start_state)
     {
         possible_states.insert(default_state);
         possible_states.insert(start_state);
@@ -226,7 +226,7 @@ public:
 
 
 template<typename State>
-class TextAutomaton : public Automaton<State, char>
+class TextFSM : public FSM<State, char>
 {
     constexpr static char alphabet[] = 
     "abcdefghijklmnopqrstuvwxyz"
@@ -333,8 +333,8 @@ class TextAutomaton : public Automaton<State, char>
     }
 
 public:
-    TextAutomaton(State default_state) : Automaton<State, char>(default_state) { }
-    TextAutomaton(State default_state, State start_state) : Automaton<State, char>(default_state, start_state) { }
+    TextFSM(State default_state) : FSM<State, char>(default_state) { }
+    TextFSM(State default_state, State start_state) : FSM<State, char>(default_state, start_state) { }
 
     void createEdge(State source, State destination, const char* rule, bool silent = false)
     {
@@ -342,12 +342,12 @@ public:
             return checkSymbol(rule, sym);
         };
 
-        Automaton<State, char>::createEdge(source, destination, rule_function, rule, silent);
+        FSM<State, char>::createEdge(source, destination, rule_function, rule, silent);
     }
 
     void createEdge(State source, State destination, const char rule, bool silent = false)
     {
-        Automaton<State, char>::createEdge(source, destination, rule, rule, silent);
+        FSM<State, char>::createEdge(source, destination, rule, rule, silent);
     }
 
     void createGlobalEdge(State destination, const char* rule, bool silent = false)
@@ -356,11 +356,11 @@ public:
             return checkSymbol(rule, sym);
         };
 
-        Automaton<State, char>::createGlobalEdge(destination, rule_function, rule, silent);
+        FSM<State, char>::createGlobalEdge(destination, rule_function, rule, silent);
     }
 
     void createGlobalEdge(State destination, const char rule, bool silent = false)
     {
-        Automaton<State, char>::createGlobalEdge(destination, rule, rule, silent);
+        FSM<State, char>::createGlobalEdge(destination, rule, rule, silent);
     }
 };
