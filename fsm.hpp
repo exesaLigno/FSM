@@ -181,7 +181,7 @@ public:
             return "";
     }
 
-    void dumpAutomatonGraph(FILE* fno)
+    void dumpFSMGraph(FILE* fno)
     {
         fprintf(fno, "digraph G {\n");
 
