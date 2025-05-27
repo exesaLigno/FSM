@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <stdexcept>
 #include <functional>
+#include <cstring>
 
 template<typename State, typename Condition>
 class FSM
