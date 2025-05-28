@@ -55,6 +55,16 @@ private:
         }
 
         Edge() { }
+
+        bool hasFlags(EdgeFlag flags_to_check)
+        {
+            return (flags & flags_to_check) == flags_to_check;
+        }
+
+        bool hasNoFlags(EdgeFlag flags_to_check)
+        {
+            return (flags & flags_to_check) == 0;
+        }
     };
 
     State default_state;
@@ -152,11 +162,11 @@ public:
         if (getEdge(cond, appropriate_edge))
         {
             changeState(appropriate_edge.destination);
-            passed_edge |= !(appropriate_edge.flags & E_SILENT == E_SILENT);
+            passed_edge |= appropriate_edge.hasNoFlags(E_SILENT);
             if (current_state == default_state && getEdge(cond, appropriate_edge))
             {
                 changeState(appropriate_edge.destination);
-                passed_edge |= !(appropriate_edge.flags & E_SILENT == E_SILENT);
+                passed_edge |= appropriate_edge.hasNoFlags(E_SILENT);
             }
         }
 
@@ -210,7 +220,7 @@ public:
             for (Edge edge : edges[source.first])
                 fprintf(fno, "\t%d -> %d [style=%s label=\"%s\"]\n", 
                     (int) edge.source, (int) edge.destination, 
-                    (edge.flags & E_SILENT == E_SILENT) ? "dotted" : "solid", 
+                    edge.hasFlags(E_SILENT) ? "dotted" : "solid", 
                     edge.label.c_str()
                 );
         }
@@ -221,7 +231,7 @@ public:
             {
                 fprintf(fno, "\t%d -> %d [style=%s label=\"%s\"]\n", 
                     (int) source, (int) global_edge.destination, 
-                    (global_edge.flags & E_SILENT == E_SILENT) ? "dotted" : "solid", 
+                    global_edge.hasFlags(E_SILENT) ? "dotted" : "solid", 
                     global_edge.label.c_str()
                 );
             }
