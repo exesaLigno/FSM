@@ -36,9 +36,9 @@ private:
             label = "";
             for (char sym : edge_label)
             {
+                if (sym == '\\' || sym == '"')
+                    label += '\\';
                 label += sym;
-                if (sym == '\\')
-                    label += sym;
             }
         }
 
